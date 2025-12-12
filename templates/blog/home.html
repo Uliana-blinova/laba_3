@@ -1,55 +1,57 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Главная страница</h2>
+<h1>Главная</h1>
 
 {% if user.is_authenticated %}
-    <p>Привет, {{ user.username }}!</p>
+  {% for post in page_obj %}
+<div class="cards">
+     <article class="post-card">
+      <div class="post-header">
+        <span class="post-author">{{ post.author.username }}</span>
+        <time>{{ post.created_at|date:"d.m.Y H:i" }}</time>
+      </div>
+      <a href="{% url 'post_detail' post.id %}" class="post-content">
+        {{ post.content|linebreaks }}
+      </a>
+      <div class="post-actions">
+        <form method="post" action="{% url 'like_post' post.id %}">
+          {% csrf_token %}
+          <button type="submit" class="like-btn {% if post.liked %}liked{% endif %}">
+            {% if post.liked %}❤️{% else %}💙{% endif %}
+          </button>
+        </form>
+        <a href="{% url 'post_detail' post.id %}#comments" class="comment-link">💬 Комментарии</a>
+      </div>
+      <div class="post-stats">
+        <span>❤️ {{ post.likes_count }}</span>
+        <span>💬 {{ post.comments_count }}</span>
+      </div>
+    </article>
+</div>
+
+  {% empty %}
+    <p>Пока никто ничего не написал.</p>
+  {% endfor %}
+
+  {% if page_obj and page_obj.paginator.num_pages > 1 %}
+    <nav class="pagination">
+      {% if page_obj.has_previous %}
+        <a href="?page=1">&laquo;</a>
+        <a href="?page={{ page_obj.previous_page_number }}">‹</a>
+      {% endif %}
+
+      <span class="active">{{ page_obj.number }}</span>
+
+      {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">›</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}">&raquo;</a>
+      {% endif %}
+    </nav>
+  {% endif %}
 {% else %}
-    <p><a href="{% url 'login' %}">Войдите</a> или <a href="{% url 'register' %}">зарегистрируйтесь</a>, чтобы видеть посты и писать комментарии.</p>
+  <p class="post-content">
+    <a href="{% url 'login' %}">Войдите</a> или <a href="{% url 'register' %}">зарегистрируйтесь</a>, чтобы видеть посты и участвовать в обсуждениях.
+  </p>
 {% endif %}
-
-<div>
-    {% for post in page_obj %}
-        <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
-    <strong>{{ post.author.username }}</strong> • {{ post.created_at|date:"d.m.Y H:i" }}
-    <a href="{% url 'post_detail' post.id %}">
-        <p>{{ post.content|truncatewords:30 }}</p>
-    </a>
-
-    <!-- Кнопка лайка -->
-   {% if user.is_authenticated %}
-    <form method="post" action="{% url 'like_post' post.id %}" style="display: inline;">
-        {% csrf_token %}
-        <button type="submit" style="background: none; border: none; cursor: pointer; font-size: 14px;">
-            {% if post.liked %}
-                ❤️
-            {% else %}
-                💙
-            {% endif %}
-        </button>
-    </form>
-{% endif %}
-
-    <small>❤️ {{ post.likes_count }} | 💬 {{ post.comments_count }}</small>
-</div>
-            <small>❤️ {{ post.likes_count }} | 💬 {{ post.comments_count }}</small>
-        </div>
-    {% empty %}
-        <p>Пока никто ничего не написал.</p>
-    {% endfor %}
-</div>
-<div>
-    {% if page_obj.has_previous %}
-        <a href="?page=1">&laquo; первая</a>
-        <a href="?page={{ page_obj.previous_page_number }}">назад</a>
-    {% endif %}
-
-    <span>Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
-
-    {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}">вперёд</a>
-        <a href="?page={{ page_obj.paginator.num_pages }}">последняя &raquo;</a>
-    {% endif %}
-</div>
 {% endblock %}

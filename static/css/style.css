@@ -1,16 +1,3 @@
-/* static/css/style.css */
-
-:root {
-  --lavender: #e6e6fa;
-  --mint: #d1f0e0;
-  --warm-gray: #f0f0f0;
-  --muted-turquoise: #b2dfdb;
-  --text-dark: #333;
-  --text-light: #666;
-  --border-color: #ddd;
-  --success: #28a745;
-  --danger: #dc3545;
-}
 
 * {
   box-sizing: border-box;
@@ -19,163 +6,393 @@
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: var(--warm-gray);
-  color: var(--text-dark);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background-color: #fff0f5;
+  color: var(--text-primary);
   line-height: 1.6;
-  padding: 0;
-  margin: 0;
+
 }
 
 .container {
-  max-width: 800px;
+  max-width: 1440px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-/* Навигация */
+/* ============ 2. Шапка навигации ============ */
 .nav {
-  background-color: white;
-  padding: 15px 0;
-  border-bottom: 1px solid var(--border-color);
-  margin-bottom: 30px;
+  background-color: #c1d8d0;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border-light);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow);
 }
 
-.nav a {
+.nav-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.nav-logo {
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: var(--text-primary);
   text-decoration: none;
-  color: #007bff;
-  margin-right: 20px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--text-secondary);
+  margin-left: 24px;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover {
+  color: var(--text-primary);
+}
+
+/* ============ 3. Сообщения ============ */
+.messages {
+  margin: 20px 0;
+}
+
+.messages div {
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 12px;
   font-weight: 500;
 }
 
-.nav a:hover {
-  text-decoration: underline;
+.messages .success {
+  background-color: #e8f5e9;
+  color: #2e7d32;
 }
 
-/* Сообщения */
-.error { color: var(--danger); }
-.success { color: var(--success); }
+.messages .error {
+  background-color: #ffebee;
+  color: #c62828;
+}
 
-/* Карточка поста */
+/* ============ 4. Карточка поста ============ */
 .post-card {
-  background: white;
-  border: 1px solid var(--border-color);
-  border-radius: 10px;
-  padding: 16px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  background: #d1e4e9;
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 24px;
+  transition: transform 0.2s;
+  max-width: 800px;
+}
+
+.post-card:hover {
+  transform: translateY(-2px);
 }
 
 .post-header {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 8px;
-  font-size: 14px;
-  color: var(--text-light);
+  margin-bottom: 12px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.post-author {
+  font-weight: 600;
+  color: var(--text-primary);
 }
 
 .post-content {
-  margin: 10px 0;
+  margin: 14px 0;
+  font-size: 1.05rem;
+  line-height: 1.7;
   white-space: pre-line;
-  font-size: 16px;
 }
 
-.post-stats {
-  font-size: 13px;
-  color: var(--text-light);
-  margin-top: 10px;
+.post-actions {
+  display: flex;
+  align-items: center;
+  margin-top: 14px;
+  gap: 16px;
 }
 
-.like-btn, .comment-btn {
+.like-btn, .comment-link {
   background: none;
   border: none;
+  color: var(--text-secondary);
   cursor: pointer;
-  color: #666;
-  font-size: 16px;
-  margin-right: 10px;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.2s;
+}
+
+.like-btn:hover, .comment-link:hover {
+  color: #e91e63;
 }
 
 .like-btn.liked {
   color: #e91e63;
 }
 
-/* Профиль */
-.profile-header {
-  text-align: center;
-  margin-bottom: 25px;
+.post-stats {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  display: flex;
+  gap: 16px;
 }
 
-.avatar {
-  width: 100px;
-  height: 100px;
+/* ============ 5. Профиль ============ */
+.profile-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.avatar-wrapper {
+  width: 120px;
+  height: 120px;
+  margin: 40px auto 16px;
   border-radius: 50%;
-  object-fit: cover;
+  overflow: hidden;
   background: var(--mint);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 40px;
-  color: #999;
+  font-size: 48px;
+  color: #a0c4b9;
 }
 
-.avatar img {
+.avatar-wrapper img {
   width: 100%;
   height: 100%;
-  border-radius: 50%;
+  object-fit: cover;
 }
 
-.bio {
-  margin: 15px 0;
+.profile-username {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.profile-bio {
   font-style: italic;
-  color: var(--text-light);
+  color: var(--text-secondary);
+  padding: 0 10px;
+  max-width: 400px;
+  margin: 20px auto;
+ }
+
+.profile-stats {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 12px;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
 }
 
-/* Формы */
-form textarea, form input[type="text"], form input[type="email"], form input[type="password"] {
+/* ============ 6. Формы ============ */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.form-control {
   width: 100%;
-  padding: 10px;
-  margin: 8px 0;
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  font-size: 15px;
+  padding: 12px 16px;
+  border: 1px solid var(--border-light);
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
 }
 
-button, input[type="submit"] {
-  background-color: var(--muted-turquoise);
-  color: var(--text-dark);
+.form-control:focus {
+  outline: none;
+  border-color: var(--muted-turquoise);
+}
+
+.btn {
+  padding: 12px 24px;
   border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
+  border-radius: 10px;
+  font-weight: 600;
   cursor: pointer;
-  font-weight: bold;
-  margin-top: 10px;
+  transition: all 0.2s;
+  font-size: 1rem;
 }
 
-button:hover, input[type="submit"]:hover {
+.btn-primary {
+  background-color: var(--btn-primary);
+  color: var(--text-primary);
+}
+
+.btn-primary:hover {
   background-color: #a0d8d0;
 }
 
-.delete-btn {
-  background-color: var(--danger);
-  color: white;
+.btn-secondary {
+  background-color: var(--btn-secondary);
+  color: var(--text-primary);
 }
 
-/* Пагинация */
+.btn-danger {
+  background-color: var(--btn-danger);
+  color: black;
+}
+
+.btn-danger:hover {
+  background-color: #ff5252;
+}
+
+.btn-link {
+  background: none;
+  color: var(--text-secondary);
+  padding: 0;
+  text-decoration: underline;
+}
+
+
 .pagination {
-  margin-top: 20px;
-  text-align: center;
-  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 24px;
 }
 
 .pagination a, .pagination span {
-  display: inline-block;
-  padding: 5px 10px;
-  margin: 0 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
   text-decoration: none;
-  color: #007bff;
+  font-weight: 500;
+  color: var(--text-primary);
 }
 
-.pagination .current {
-  font-weight: bold;
-  color: var(--text-dark);
+.pagination .active {
+  background-color: var(--muted-turquoise);
+  color: white;
+}
+
+.posts-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Центрирует по горизонтали */
+  gap: 20px; /* Отступ между карточками */
+  padding: 20px;
+  width: 100%;
+}
+
+.post-card {
+  background-color: #e0f7f1; /* Пример цвета карточки — можно заменить на ваш */
+  border-radius: 12px;
+  padding: 20px;
+  width: 600px; /* Можно сделать max-width: 90% для мобильных */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease;
+}
+.cards{
+display: flex;
+justify-content:center;
+margin-top: 40px;
+ }
+
+/* Опционально: при наведении — лёгкий эффект */
+.post-card:hover {
+  transform: translateY(-2px);
+}
+#id_content{
+max-width: 300px;
+}
+main{
+margin-top: 40px;
+display: flex;
+justify-content: center;
+flex-direction:column;}
+
+.btn{
+background: #c1d8d0;
+text-decoration: none;
+color: black;
+}
+
+h2{
+margin-bottom: 25px;}
+
+main{
+display:flex;
+flex-direction: column;
+justify-content: center;}
+
+.form-log{
+display:flex;
+flex-direction:column;
+align-items: center;
+justify-content:center;
+gap: 25px;
+width:400px;
+background: #c1d8d0;
+height:400px;
+}
+main{
+display:flex;
+flex-direction:column;
+align-items: center;
+justify-content:center;
+}
+#id_username,
+#id_password{
+width: 200px;
+height:35px;}
+
+.btn_log{
+width:100px;
+height:40px;
+border-radius:17px;
+border:none;
+
+}
+/* Стилизация полей формы */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--border-light);
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+.form-card{
+background: #c1d8d0;
+width:400px;
+height:400px;
+display:flex;
+flex-direction: column;
+align-items:center;
+justify-content: center;}
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--muted-turquoise);
 }

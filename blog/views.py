@@ -12,15 +12,21 @@ from django.db.models.functions import Coalesce
 from django.db.models import Count, Exists, OuterRef
 
 def home(request):
+    if not request.user.is_authenticated:
+        return render(request, 'blog/home.html', {
+            'page_obj': None,
+            'show_login_message': True
+        })
+
     posts = Post.objects.select_related('author').annotate(
         likes_count=Count('likes', distinct=True),
         comments_count=Count('comments', distinct=True),
-        liked=Exists(Like.objects.filter(post=OuterRef('pk'), user=request.user)) if request.user.is_authenticated else Value(False)
     ).order_by('-created_at')[:50]
 
     paginator = Paginator(posts, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+
     return render(request, 'blog/home.html', {'page_obj': page_obj})
 
 def profile_view(request, user_id):

@@ -1,11 +1,26 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Регистрация</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Зарегистрироваться</button>
+<h1>Регистрация</h1>
+
+<form method="post" class="form-card" style="margin-top: 20px;">
+  {% csrf_token %}
+  <div class="form-group">
+    {{ form.username.label_tag }}
+    {{ form.username}}
+  </div>
+  <div class="form-group">
+    {{ form.password1.label_tag }}
+    {{ form.password1}}
+  </div>
+  <div class="form-group">
+    {{ form.password2.label_tag }}
+    {{ form.password2}}
+  </div>
+  <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
 </form>
-<p>Уже есть аккаунт? <a href="{% url 'login' %}">Войти</a></p>
+
+<p style="margin-top: 20px;">
+  Уже есть аккаунт? <a href="{% url 'login' %}">Войти</a>
+</p>
 {% endblock %}

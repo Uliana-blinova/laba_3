@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
 <h2>{{ title }}</h2>
 
@@ -7,8 +7,8 @@
     {% csrf_token %}
     {{ form.content }}
     <div style="margin-top: 10px;">
-        <button type="submit">Сохранить</button>
-        <a href="{% url 'home' %}" style="margin-left: 10px;">Отмена</a>
+        <button class="btn" type="submit">Сохранить</button>
+        <a href="{% url 'home' %}" class="btn">Отмена</a>
     </div>
 </form>
 {% endblock %}
