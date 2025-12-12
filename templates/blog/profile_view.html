@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Профиль пользователя #{{ user_id }}</h2>
+<p>Здесь будет аватар, био и посты — пока заглушка.</p>
+<a href="{% url 'profile_edit' %}">Редактировать профиль</a>
+{% endblock %}
