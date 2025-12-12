@@ -1,13 +1,14 @@
-# blog/views.py
+
 
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib import messages
 from django.core.paginator import Paginator
-from .models import Post
+from .models import Post, Profile
+from .forms import ProfileForm
 
-# === Главная страница ===
+
 def home(request):
     posts = Post.objects.select_related('author').order_by('-created_at')
     paginator = Paginator(posts, 10)
@@ -15,11 +16,11 @@ def home(request):
     page_obj = paginator.get_page(page_number)
     return render(request, 'blog/home.html', {'page_obj': page_obj})
 
-# === Профиль (пока заглушка) ===
+
 def profile_view(request, user_id):
     return render(request, 'blog/profile_view.html', {'user_id': user_id})
 
-# === Регистрация ===
+
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -34,7 +35,7 @@ def register(request):
         form = UserCreationForm()
     return render(request, 'blog/register.html', {'form': form})
 
-# === Вход ===
+
 def user_login(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
@@ -49,14 +50,14 @@ def user_login(request):
         form = AuthenticationForm()
     return render(request, 'blog/login.html', {'form': form})
 
-# === Выход ===
+
 def user_logout(request):
     logout(request)
     return redirect('home')
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
-# --- Профиль ---
+
 def profile_view(request, user_id):
     return render(request, 'blog/profile_view.html', {'user_id': user_id})
 
@@ -68,7 +69,7 @@ def profile_edit(request):
 def profile_delete(request):
     return render(request, 'blog/profile_delete.html')
 
-# --- Посты ---
+
 @login_required
 def post_create(request):
     return render(request, 'blog/post_form.html', {'title': 'Создать пост'})
@@ -84,7 +85,7 @@ def post_edit(request, post_id):
 def post_delete(request, post_id):
     return render(request, 'blog/post_confirm_delete.html', {'post_id': post_id})
 
-# --- Комментарии ---
+
 @login_required
 def comment_edit(request, comment_id):
     return render(request, 'blog/comment_form.html', {'comment_id': comment_id})
@@ -93,9 +94,22 @@ def comment_edit(request, comment_id):
 def comment_delete(request, comment_id):
     return render(request, 'blog/comment_confirm_delete.html', {'comment_id': comment_id})
 
-# --- Лайки ---
+
 @login_required
 def like_post(request, post_id):
     # Пока просто перенаправляем
     from django.shortcuts import redirect
     return redirect('post_detail', post_id=post_id)
+
+@login_required
+def profile_edit(request):
+    profile, created = Profile.objects.get_or_create(user=request.user)
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Профиль обновлён!')
+            return redirect('profile_view', user_id=request.user.id)
+    else:
+        form = ProfileForm(instance=profile)
+    return render(request, 'blog/profile_edit.html', {'form': form})

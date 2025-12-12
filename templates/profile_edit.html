@@ -1,7 +1,14 @@
-<!-- templates/blog/profile_edit.html -->
+
 {% extends 'base.html' %}
+
 {% block content %}
-<h2>Редактирование профиля</h2>
-<p>Заглушка: форма редактирования будет здесь.</p>
-<a href="{% url 'profile_view' user.id %}">Назад в профиль</a>
+<h2>Редактировать профиль</h2>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Сохранить</button>
+</form>
+
+<a href="{% url 'profile_view' user.id %}">← Назад в профиль</a>
 {% endblock %}
