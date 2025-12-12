@@ -1,7 +1,56 @@
+<!-- templates/blog/profile_view.html -->
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Профиль пользователя #{{ user_id }}</h2>
-<p>Здесь будет аватар, био и посты — пока заглушка.</p>
-<a href="{% url 'profile_edit' %}">Редактировать профиль</a>
+<h2>Профиль: {{ profile_user.username }}</h2>
+
+<!-- Аватар -->
+<div>
+    {% if profile_user.profile.avatar %}
+        <img src="{{ profile_user.profile.avatar.url }}" alt="Аватар" width="100" style="border-radius: 50%;">
+    {% else %}
+        <div style="width:100px; height:100px; background:#eee; border-radius:50%; display:flex; align-items:center; justify-content:center;">
+            ?
+        </div>
+    {% endif %}
+</div>
+
+<!-- Био -->
+<p><em>{{ profile_user.profile.bio|default:"Биография отсутствует" }}</em></p>
+
+<!-- Управление (только свой профиль) -->
+{% if user.is_authenticated and user.id == profile_user.id %}
+    <p>
+        <a href="{% url 'profile_edit' %}">✏️ Редактировать профиль</a> |
+        <a href="{% url 'profile_delete' %}" style="color: #dc3545;">🗑️ Удалить профиль</a>
+    </p>
+{% endif %}
+
+<!-- Посты -->
+<h3>Посты ({{ page_obj.paginator.count }}):</h3>
+{% for post in page_obj %}
+    <div style="border-bottom: 1px solid #eee; padding: 10px 0;">
+        <p>{{ post.content|truncatewords:20 }}</p>
+        <small>{{ post.created_at|date:"d.m.Y H:i" }} | ❤️ {{ post.likes_count }} | 💬 {{ post.comments_count }}</small>
+    </div>
+{% empty %}
+    <p>Пользователь ещё ничего не написал.</p>
+{% endfor %}
+
+<!-- Пагинация -->
+<div style="margin-top: 15px;">
+    {% if page_obj.has_previous %}
+        <a href="?page=1">&laquo; первая</a>
+        <a href="?page={{ page_obj.previous_page_number }}">назад</a>
+    {% endif %}
+
+    Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">вперёд</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}">последняя &raquo;</a>
+    {% endif %}
+</div>
+
+<a href="{% url 'home' %}">← На главную</a>
 {% endblock %}

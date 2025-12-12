@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="max-width: 700px; margin: 0 auto;">
+    <div style="border: 1px solid #ddd; padding: 15px; border-radius: 8px;">
+        <div>
+            <strong>{{ post.author.username }}</strong>
+            <small style="color: #666;">{{ post.created_at|date:"d.m.Y H:i" }}</small>
+        </div>
+        <div style="margin: 15px 0;">
+            {{ post.content|linebreaks }}
+        </div>
+        <div style="color: #555; font-size: 14px;">
+            ❤️ {{ post.likes_count }} &nbsp; 💬 {{ post.comments_count }}
+        </div>
+    </div>
+
+
+
+    <div style="margin-top: 20px;">
+        {% if user.is_authenticated %}
+            {% if user == post.author %}
+                <a href="{% url 'post_edit' post.id %}">✏️ Редактировать</a> |
+                <a href="{% url 'post_delete' post.id %}" style="color: #dc3545;">🗑️ Удалить</a>
+            {% endif %}
+        {% endif %}
+        <a href="{% url 'home' %}">← Все посты</a>
+    </div>
+</div>
+{% endblock %}

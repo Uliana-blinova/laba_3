@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Удалить пост?</h2>
+<p>«{{ post.content|truncatewords:15 }}...»</p>
+<p>⚠️ Это действие нельзя отменить.</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" style="background: #dc3545; color: white;">Удалить</button>
+    <a href="{% url 'post_detail' post.id %}" style="margin-left: 10px;">Отмена</a>
+</form>
+{% endblock %}

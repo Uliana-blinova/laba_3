@@ -1,0 +1,14 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Удалить профиль?</h2>
+<p>⚠️ Это действие удалит ваш аккаунт, все посты и комментарии. Отменить нельзя.</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" style="background: #dc3545; color: white;">Удалить профиль</button>
+</form>
+
+<a href="{% url 'profile_view' user.id %}">← Отмена</a>
+{% endblock %}
