@@ -1,4 +1,4 @@
-# blog/models.py
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -22,13 +22,6 @@ class Post(models.Model):
     def __str__(self):
         return f"Post by {self.author.username} on {self.created_at.strftime('%Y-%m-%d')}"
 
-    @property
-    def likes_count(self):
-        return self.likes.count()
-
-    @property
-    def comments_count(self):
-        return self.comments.count()
 
 
 class Comment(models.Model):
@@ -52,3 +45,8 @@ class Like(models.Model):
 
     def __str__(self):
         return f"{self.user.username} likes post {self.post.id}"
+
+    def liked_by_user(self, user):
+        if not user.is_authenticated:
+            return False
+        return self.likes.filter(user=user).exists()

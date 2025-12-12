@@ -12,8 +12,27 @@
 <div>
     {% for post in page_obj %}
         <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
-            <strong>{{ post.author.username }}</strong> • {{ post.created_at|date:"d.m.Y H:i" }}
-            <p>{{ post.content|truncatewords:30 }}</p>
+    <strong>{{ post.author.username }}</strong> • {{ post.created_at|date:"d.m.Y H:i" }}
+    <a href="{% url 'post_detail' post.id %}">
+        <p>{{ post.content|truncatewords:30 }}</p>
+    </a>
+
+    <!-- Кнопка лайка -->
+   {% if user.is_authenticated %}
+    <form method="post" action="{% url 'like_post' post.id %}" style="display: inline;">
+        {% csrf_token %}
+        <button type="submit" style="background: none; border: none; cursor: pointer; font-size: 14px;">
+            {% if post.liked %}
+                ❤️
+            {% else %}
+                💙
+            {% endif %}
+        </button>
+    </form>
+{% endif %}
+
+    <small>❤️ {{ post.likes_count }} | 💬 {{ post.comments_count }}</small>
+</div>
             <small>❤️ {{ post.likes_count }} | 💬 {{ post.comments_count }}</small>
         </div>
     {% empty %}
