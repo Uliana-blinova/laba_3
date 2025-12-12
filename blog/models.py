@@ -41,7 +41,7 @@ class Like(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('post', 'user')
+        unique_together = ('post', 'user') #один пользователь не может лайкнуть один и тот же пост дважды
 
     def __str__(self):
         return f"{self.user.username} likes post {self.post.id}"

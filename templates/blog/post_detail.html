@@ -26,7 +26,6 @@
   {% endif %}
 </article>
 
-<!-- Комментарии -->
 <h2 id="comments">Комментарии ({{ comments|length }})</h2>
 
 {% for comment in comments %}
@@ -48,7 +47,7 @@
   <p>Пока нет комментариев.</p>
 {% endfor %}
 
-<!-- Форма комментария -->
+
 {% if user.is_authenticated %}
   <div class="post-card" style="margin-top: 30px;">
     <h3>Оставить комментарий</h3>
