@@ -2,14 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from .models import Post, Profile, Comment,  Like
-from .forms import ProfileForm, PostForm, CommentForm
-from django.db.models import Count, Exists, OuterRef, Value
-from django.db.models.functions import Coalesce
-from django.db.models import Count, Exists, OuterRef
+from django.db.models import Count
 
 def home(request):
     if not request.user.is_authenticated:
@@ -125,13 +121,11 @@ def post_detail(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     comments = post.comments.select_related('author').order_by('created_at')
 
-    # Аннотируем пост информацией о лайке
     if request.user.is_authenticated:
         post.liked = Like.objects.filter(post=post, user=request.user).exists()
     else:
         post.liked = False
 
-    # Форма комментария
     if request.user.is_authenticated:
         if request.method == 'POST':
             form = CommentForm(request.POST)
@@ -190,9 +184,7 @@ def like_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     like, created = Like.objects.get_or_create(post=post, user=request.user)
     if not created:
-        # Лайк уже есть → удаляем
         like.delete()
-    # После действия — возвращаемся туда, откуда пришли
     return redirect(request.META.get('HTTP_REFERER', 'home'))
 
 @login_required
