@@ -28,7 +28,7 @@ def home(request):
 def profile_view(request, user_id):
     user = get_object_or_404(User, id=user_id)
     posts = Post.objects.filter(author=user).order_by('-created_at')
-    print(f"Найдено постов для {user.username}: {posts.count()}")  # ← дебаг
+    print(f"Найдено постов для {user.username}: {posts.count()}")
     paginator = Paginator(posts, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -73,33 +73,6 @@ def user_logout(request):
     return redirect('home')
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-
-
-def profile_view(request, user_id):
-    user = get_object_or_404(User, id=user_id)
-    posts = Post.objects.filter(author=user).order_by('-created_at')
-    paginator = Paginator(posts, 10)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    return render(request, 'blog/profile_view.html', {
-        'profile_user': user,  # ← важно!
-        'page_obj': page_obj,
-    })
-
-@login_required
-def profile_edit(request):
-    return render(request, 'blog/profile_edit.html')
-
-@login_required
-def profile_delete(request):
-    if request.method == 'POST':
-        user = request.user
-        logout(request)
-        user.delete()
-        messages.success(request, 'Ваш профиль удалён.')
-        return redirect('home')
-    return render(request, 'blog/profile_delete.html')
-
 
 @login_required
 def post_create(request):
@@ -167,16 +140,6 @@ def post_delete(request, post_id):
         messages.success(request, 'Пост удалён.')
         return redirect('profile_view', user_id=request.user.id)
     return render(request, 'blog/post_confirm_delete.html', {'post': post})
-
-
-@login_required
-def comment_edit(request, comment_id):
-    return render(request, 'blog/comment_form.html', {'comment_id': comment_id})
-
-@login_required
-def comment_delete(request, comment_id):
-    return render(request, 'blog/comment_confirm_delete.html', {'comment_id': comment_id})
-
 
 
 @login_required
